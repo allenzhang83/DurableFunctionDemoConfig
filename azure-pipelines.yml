@@ -20,8 +20,13 @@ variables:
   workingDirectory: '$(System.DefaultWorkingDirectory)/DurableFunctionDemoConfig/DurableFunctionDemoConfig'
   
   # GitHub API credentials
-  GitHubUserName: 'allenzhang83'
   GitHubPassword: 'MyTopSecret'
+  
+  # Hosting environment
+  HostingEnv: 'dev'
+  
+  # App Configuration service connection string
+  AppConfigurationConnectionString: 'YourAppConfigurationConnectiongString'
 
 stages:
 - stage: Build
@@ -78,4 +83,4 @@ stages:
               appType: functionApp
               appName: $(functionAppName)
               package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
-              appSettings: '-GitHubUserName $(GitHubUserName) -GitHubPassword $(GitHubPassword)'
+              appSettings: '-HostingEnv $(HostingEnv) -GitHubPassword $(GitHubPassword) -AppConfigurationConnectionString $(AppConfigurationConnectionString)'
