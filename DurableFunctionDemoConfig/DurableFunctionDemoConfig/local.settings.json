@@ -3,7 +3,8 @@
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
-    "GitHubUserName": "YourUsername",
-    "GitHubPassword": "YourPersonalAccessToken"
+    "GitHubPassword": "YourPersonalAccessToken",
+    "HostingEnv": "dev",
+    "AppConfigurationConnectionString": "YouAppConfigServiceConnectionString"
   }
 }
