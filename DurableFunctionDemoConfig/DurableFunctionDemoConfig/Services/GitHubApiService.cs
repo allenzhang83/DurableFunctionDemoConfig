@@ -1,5 +1,6 @@
 ﻿using DurableFunctionDemoConfig.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -15,13 +16,15 @@ namespace DurableFunctionDemoConfig.Services
     {
         private readonly string _username;
         private readonly string _password;
-        private HttpClient _httpClient = new HttpClient();
-        private const string BaseUrl = "https://api.github.com";
+        private readonly string _baseUrl;
+        private HttpClient _httpClient = new HttpClient();        
 
-        public GitHubApiService(IConfiguration configuration)
+        public GitHubApiService(IOptions<GitHubApiConfig> gitHubApiConfig)
         {
-            _username = configuration["GitHubUserName"];
-            _password = configuration["GitHubPassword"];
+            var configValue = gitHubApiConfig.Value;
+            _username = configValue.Username;
+            _password = configValue.Password;
+            _baseUrl = configValue.BaseUrl;
         }
 
         public async Task<RepoViewCount> GetRepositoryViewCount(string repoName)
@@ -32,7 +35,7 @@ namespace DurableFunctionDemoConfig.Services
             };
 
             PrepareHttpClient();
-            var url = $"{BaseUrl}/repos/{_username}/{repoName}/traffic/views";
+            var url = $"{_baseUrl}/repos/{_username}/{repoName}/traffic/views";
             var request = new HttpRequestMessage(HttpMethod.Get, url);
             var response = await _httpClient.SendAsync(request);
 
@@ -48,7 +51,7 @@ namespace DurableFunctionDemoConfig.Services
         {
             var result = new List<string>();
             PrepareHttpClient();
-            var url = $"{BaseUrl}/users/{_username}/repos";
+            var url = $"{_baseUrl}/users/{_username}/repos";
             var request = new HttpRequestMessage(HttpMethod.Get, url);
             var response = await _httpClient.SendAsync(request);
 

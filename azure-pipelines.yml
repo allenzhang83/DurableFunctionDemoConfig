@@ -19,12 +19,6 @@ variables:
   # Working Directory
   workingDirectory: '$(System.DefaultWorkingDirectory)/DurableFunctionDemoConfig/DurableFunctionDemoConfig'
   
-  # GitHub API credentials
-  GitHubPassword: 'MyTopSecret'
-  
-  # Hosting environment
-  HostingEnv: 'dev'
-  
   # App Configuration service connection string
   AppConfigurationConnectionString: 'YourAppConfigurationConnectiongString'
 
@@ -83,4 +77,4 @@ stages:
               appType: functionApp
               appName: $(functionAppName)
               package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
-              appSettings: '-HostingEnv $(HostingEnv) -GitHubPassword $(GitHubPassword) -AppConfigurationConnectionString $(AppConfigurationConnectionString)'
+              appSettings: '-AppConfigurationConnectionString $(AppConfigurationConnectionString)'

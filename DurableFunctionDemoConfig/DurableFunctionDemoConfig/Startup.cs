@@ -1,7 +1,7 @@
-﻿using DurableFunctionDemoConfig.Services;
+﻿using DurableFunctionDemoConfig.Models;
+using DurableFunctionDemoConfig.Services;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -21,15 +21,17 @@ namespace DurableFunctionDemoConfig
 
             var builtConfig = configBuilder.Build();
             var appConfigConnectionString = builtConfig["AppConfigurationConnectionString"];
-            var hostingEnv = builtConfig["HostingEnv"];
 
             configBuilder.AddAzureAppConfiguration(options =>
                 options
-                    .Connect(appConfigConnectionString)
-                    .Select(KeyFilter.Any, hostingEnv)
+                    .Connect(appConfigConnectionString)                    
             );
             builtConfig = configBuilder.Build();
+
             builder.Services.Replace(new ServiceDescriptor(typeof(IConfiguration), builtConfig));
+
+            // config the strongly typed section
+            builder.Services.Configure<GitHubApiConfig>(builtConfig.GetSection("GitHub"));
 
             builder.Services.AddSingleton<IGitHubApiService, GitHubApiService>();
         }
